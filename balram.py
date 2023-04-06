@@ -40,6 +40,17 @@ print(data)
 
 # Define a function to plot a line chart for a given indicator name
 def lineplot_corr(df, indicator_name):
+    """
+    Plot a line chart of the data for the specified indicator name for selected countries.
+
+    Parameters:
+    df (pd.DataFrame): A pandas DataFrame containing the data to be plotted.
+    indicator_name (str): The name of the indicator to be plotted.
+
+    Returns:
+    None
+
+    """
     # Save the data to a new csv file
     df.to_csv('data_read122.csv')
     
@@ -64,6 +75,17 @@ lineplot_corr(data, "Agricultural land (% of land area)")
 
 
 def barplot_corr(df, indicator_name):
+    """
+    Plot a bar chart of the data for the specified indicator name for selected countries.
+
+    Parameters:
+    df (pd.DataFrame): A pandas DataFrame containing the data to be plotted.
+    indicator_name (str): The name of the indicator to be plotted.
+
+    Returns:
+    None
+
+    """
     # Drop unnecessary columns
     df = df.drop(["Country Code","Indicator Code"],axis=1)
     # Set the index to the indicator name
@@ -77,6 +99,12 @@ def barplot_corr(df, indicator_name):
     df = df[df['Country Name'].isin(countries_selected)]
     # Create a bar plot
     df.plot(x="Country Name", y=['1975', '1980', '1985', '1990', '1995', '2000', '2005', '2010', '2015', '2020'], kind="bar")
+   
+    # calculate skewness and kurtosis values
+    skewness = data.loc[:, '1975':'2020'].skew()
+    kurtosis = data.loc[:, '1975':'2020'].kurtosis()
+    print(f"Skewness values: {skewness}")
+    print(f"Kurtosis values: {kurtosis}")
     plt.title(indicator_name)
     plt.show()
 
@@ -84,6 +112,12 @@ def barplot_corr(df, indicator_name):
 barplot_corr(data, "Cereal yield (kg per hectare)")
 
 def heatmap_corr():
+    """
+    Plots a heatmap of the correlation matrix for a subset of indicators related to India.
+
+    Returns:
+    None
+    """
     # Group the data by country name
     country_group = data.groupby("Country Name")
     # Filter rows related to Brazil
